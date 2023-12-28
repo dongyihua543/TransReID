@@ -47,4 +47,3 @@ class RandomErasing(object):
                 return img
 
         return img
-

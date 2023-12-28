@@ -6,9 +6,10 @@
 The *official* repository for  [TransReID: Transformer-based Object Re-Identification](https://arxiv.org/abs/2102.04378) achieves state-of-the-art performances on object re-ID, including person re-ID and vehicle re-ID.
 
 ## News
+
 - 2023.3 The general human representation pre-training model. [SOLIDER](https://github.com/tinyvision/SOLIDER)
 - 2021.12 We improve TransReID via self-supervised pre-training. Please refer to [TransReID-SSL](https://github.com/michuanhaohao/TransReID-SSL)
-- 2021.3  We release the code of TransReID.
+- 2021.3 We release the code of TransReID.
 
 ## Pipeline
 
@@ -17,8 +18,6 @@ The *official* repository for  [TransReID: Transformer-based Object Re-Identific
 ## Abaltion Study of Transformer-based Strong Baseline
 
 ![framework](figs/ablation.png)
-
-
 
 ## Requirements
 
@@ -36,8 +35,9 @@ Note that we use torch.cuda.amp to accelerate speed of training which requires p
 mkdir data
 ```
 
-Download the person datasets [Market-1501](https://drive.google.com/file/d/0B8-rUzbwVRk0c054eEozWG9COHM/view), [MSMT17](https://arxiv.org/abs/1711.08565), [DukeMTMC-reID](https://arxiv.org/abs/1609.01775),[Occluded-Duke](https://github.com/lightas/Occluded-DukeMTMC-Dataset), and the vehicle datasets [VehicleID](https://www.pkuml.org/resources/pku-vehicleid.html), [VeRi-776](https://github.com/JDAI-CV/VeRidataset), 
-Then unzip them and rename them under the directory like
+Download the person datasets [Market-1501](https://drive.google.com/file/d/0B8-rUzbwVRk0c054eEozWG9COHM/view), [MSMT17](https://arxiv.org/abs/1711.08565)
+, [DukeMTMC-reID](https://arxiv.org/abs/1609.01775),[Occluded-Duke](https://github.com/lightas/Occluded-DukeMTMC-Dataset), and the vehicle datasets [VehicleID](https://www.pkuml.org/resources/pku-vehicleid.html)
+, [VeRi-776](https://github.com/JDAI-CV/VeRidataset), Then unzip them and rename them under the directory like
 
 ```
 data
@@ -57,11 +57,13 @@ data
 
 ### Prepare DeiT or ViT Pre-trained Models
 
-You need to download the ImageNet pretrained transformer model : [ViT-Base](https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-vitjx/jx_vit_base_p16_224-80ecf9dd.pth), [ViT-Small](https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-weights/vit_small_p16_224-15ec54c9.pth), [DeiT-Small](https://dl.fbaipublicfiles.com/deit/deit_small_distilled_patch16_224-649709d9.pth), [DeiT-Base](https://dl.fbaipublicfiles.com/deit/deit_base_distilled_patch16_224-df68dfff.pth)
+You need to download the ImageNet pretrained transformer model : [ViT-Base](https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-vitjx/jx_vit_base_p16_224-80ecf9dd.pth)
+, [ViT-Small](https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-weights/vit_small_p16_224-15ec54c9.pth), [DeiT-Small](https://dl.fbaipublicfiles.com/deit/deit_small_distilled_patch16_224-649709d9.pth)
+, [DeiT-Base](https://dl.fbaipublicfiles.com/deit/deit_base_distilled_patch16_224-df68dfff.pth)
 
 ## Training
 
-We utilize 1  GPU for training.
+We utilize 1 GPU for training.
 
 ```bash
 python train.py --config_file configs/transformer_base.yml MODEL.DEVICE_ID "('your device id')" MODEL.STRIDE_SIZE ${1} MODEL.SIE_CAMERA ${2} MODEL.SIE_VIEW ${3} MODEL.JPM ${4} MODEL.TRANSFORMER_TYPE ${5} OUTPUT_DIR ${OUTPUT_DIR} DATASETS.NAMES "('your dataset name')"
@@ -73,10 +75,11 @@ python train.py --config_file configs/transformer_base.yml MODEL.DEVICE_ID "('yo
 - `${2}`: whether using SIE with camera, True or False.
 - `${3}`: whether using SIE with view, True or False.
 - `${4}`: whether using JPM, True or False.
-- `${5}`: choose transformer type from `'vit_base_patch16_224_TransReID'`,(The structure of the deit is the same as that of the vit, and only need to change the imagenet pretrained model)  `'vit_small_patch16_224_TransReID'`,`'deit_small_patch16_224_TransReID'`,
+- `${5}`: choose transformer type from `'vit_base_patch16_224_TransReID'`,(The structure of the deit is the same as that of the vit, and only need to change the imagenet pretrained model)  `'vit_small_patch16_224_TransReID'`
+  ,`'deit_small_patch16_224_TransReID'`,
 - `${OUTPUT_DIR}`: folder for saving logs and checkpoints, e.g. `../logs/market1501`
 
-**or you can directly train with following  yml and commands:**
+**or you can directly train with following yml and commands:**
 
 ```bash
 # DukeMTMC transformer-based baseline
@@ -105,7 +108,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node
 Bash dist_train.sh 
 ```
 
-Tips:  For person datasets  with size 256x128, TransReID with stride occupies 12GB GPU memory and TransReID occupies 7GB GPU memory. 
+Tips:  For person datasets with size 256x128, TransReID with stride occupies 12GB GPU memory and TransReID occupies 7GB GPU memory.
 
 ## Evaluation
 

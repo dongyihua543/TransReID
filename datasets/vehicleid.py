@@ -7,6 +7,7 @@ from .bases import BaseImageDataset
 from collections import defaultdict
 import pickle
 
+
 class VehicleID(BaseImageDataset):
     """
     VehicleID
@@ -77,7 +78,6 @@ class VehicleID(BaseImageDataset):
         pid2label = {pid: label for label, pid in enumerate(pid_container)}
         return pid2label
 
-
     def parse_img_pids(self, nl_pairs, pid2label=None, cam=0):
         # il_pair is the pairs of img name and label
         output = []
@@ -87,7 +87,7 @@ class VehicleID(BaseImageDataset):
             if pid2label is not None:
                 pid = pid2label[pid]
             camid = cam  # use 0 or 1
-            img_path = osp.join(self.img_dir, name+'.jpg')
+            img_path = osp.join(self.img_dir, name + '.jpg')
             viewid = 1
             output.append((img_path, pid, camid, viewid))
         return output
@@ -109,8 +109,8 @@ class VehicleID(BaseImageDataset):
         train_pids = list(train_pid_dict.keys())
         num_train_pids = len(train_pids)
         assert num_train_pids == 13164, 'There should be 13164 vehicles for training,' \
-                                        ' but but got {}, please check the data'\
-                                        .format(num_train_pids)
+                                        ' but but got {}, please check the data' \
+            .format(num_train_pids)
         # print('num of train ids: {}'.format(num_train_pids))
         test_pid_dict = defaultdict(list)
         with open(self.test_list) as f_test:
@@ -122,8 +122,8 @@ class VehicleID(BaseImageDataset):
         test_pids = list(test_pid_dict.keys())
         num_test_pids = len(test_pids)
         assert num_test_pids == self.test_size, 'There should be {} vehicles for testing,' \
-                                                ' but but got {}, please check the data'\
-                                                .format(self.test_size, num_test_pids)
+                                                ' but but got {}, please check the data' \
+            .format(self.test_size, num_test_pids)
 
         train_data = []
         query_data = []

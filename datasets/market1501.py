@@ -12,6 +12,8 @@ import os.path as osp
 from .bases import BaseImageDataset
 from collections import defaultdict
 import pickle
+
+
 class Market1501(BaseImageDataset):
     """
     Market1501
@@ -25,7 +27,7 @@ class Market1501(BaseImageDataset):
     """
     dataset_dir = 'market1501'
 
-    def __init__(self, root='', verbose=True, pid_begin = 0, **kwargs):
+    def __init__(self, root='', verbose=True, pid_begin=0, **kwargs):
         super(Market1501, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.train_dir = osp.join(self.dataset_dir, 'bounding_box_train')

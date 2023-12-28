@@ -98,4 +98,3 @@ def re_ranking(probFea, galFea, k1, k2, lambda_value, local_distmat=None, only_l
     del jaccard_dist
     final_dist = final_dist[:query_num, query_num:]
     return final_dist
-

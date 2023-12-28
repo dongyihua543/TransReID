@@ -51,12 +51,10 @@ class CircleLoss(nn.Module):
         self._num_classes = num_classes
         self.reset_parameters()
 
-
     def reset_parameters(self):
         nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
 
     def __call__(self, bn_feat, targets):
-
         sim_mat = F.linear(F.normalize(bn_feat), F.normalize(self.weight))
         alpha_p = torch.clamp_min(-sim_mat.detach() + 1 + self.m, min=0.)
         alpha_n = torch.clamp_min(sim_mat.detach() + self.m, min=0.)
@@ -82,6 +80,7 @@ class Arcface(nn.Module):
             m: margin
             cos(theta + m)
         """
+
     def __init__(self, in_features, out_features, s=30.0, m=0.30, easy_margin=False, ls_eps=0.0):
         super(Arcface, self).__init__()
         self.in_features = in_features

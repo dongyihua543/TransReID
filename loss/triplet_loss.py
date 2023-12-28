@@ -43,7 +43,7 @@ def cosine_dist(x, y):
     x_norm = torch.pow(x, 2).sum(1, keepdim=True).sqrt().expand(m, n)
     y_norm = torch.pow(y, 2).sum(1, keepdim=True).sqrt().expand(n, m).t()
     xy_intersection = torch.mm(x, y.t())
-    dist = xy_intersection/(x_norm * y_norm)
+    dist = xy_intersection / (x_norm * y_norm)
     dist = (1. - dist) / 2
     return dist
 
@@ -133,5 +133,3 @@ class TripletLoss(object):
         else:
             loss = self.ranking_loss(dist_an - dist_ap, y)
         return loss, dist_ap, dist_an
-
-

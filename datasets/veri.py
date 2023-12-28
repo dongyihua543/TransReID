@@ -114,4 +114,3 @@ class VeRi(BaseImageDataset):
         print(view_container, 'view_container')
         print(count, 'samples without viewpoint annotations')
         return dataset
-

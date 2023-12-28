@@ -4,6 +4,7 @@ from torch.utils.data import Dataset
 import os.path as osp
 import random
 import torch
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
@@ -83,4 +84,4 @@ class ImageDataset(Dataset):
         if self.transform is not None:
             img = self.transform(img)
 
-        return img, pid, camid, trackid,img_path.split('/')[-1]
+        return img, pid, camid, trackid, img_path.split('/')[-1]

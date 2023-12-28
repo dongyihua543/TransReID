@@ -6,17 +6,17 @@ MODEL:
   IF_WITH_CENTER: 'no'
   NAME: 'transformer'
   NO_MARGIN: True
-#  DEVICE_ID: ('0')
+  #  DEVICE_ID: ('0')
   TRANSFORMER_TYPE: 'vit_base_patch16_224_TransReID'
-  STRIDE_SIZE: [16, 16]
+  STRIDE_SIZE: [ 16, 16 ]
   DIST_TRAIN: True
   JPM: True
   SHIFT_NUM: 8
   RE_ARRANGE: True
 
 INPUT:
-  SIZE_TRAIN: [256, 256]
-  SIZE_TEST: [256, 256]
+  SIZE_TRAIN: [ 256, 256 ]
+  SIZE_TEST: [ 256, 256 ]
   PROB: 0.5 # random horizontal flip
   RE_PROB: 0.8 # random erasing
   PADDING: 10
@@ -40,7 +40,7 @@ SOLVER:
   CHECKPOINT_PERIOD: 120
   LOG_PERIOD: 50
   EVAL_PERIOD: 120
-  WEIGHT_DECAY:  1e-4
+  WEIGHT_DECAY: 1e-4
   WEIGHT_DECAY_BIAS: 1e-4
   BIAS_LR_FACTOR: 2
 

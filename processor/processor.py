@@ -8,6 +8,7 @@ from utils.metrics import R1_mAP_eval
 from torch.cuda import amp
 import torch.distributed as dist
 
+
 def do_train(cfg,
              model,
              center_criterion,
@@ -55,7 +56,7 @@ def do_train(cfg,
             target_cam = target_cam.to(device)
             target_view = target_view.to(device)
             with amp.autocast(enabled=True):
-                score, feat = model(img, target, cam_label=target_cam, view_label=target_view )
+                score, feat = model(img, target, cam_label=target_cam, view_label=target_view)
                 loss = loss_fn(score, feat, target, target_cam)
 
             scaler.scale(loss).backward()
@@ -88,7 +89,7 @@ def do_train(cfg,
             pass
         else:
             logger.info("Epoch {} done. Time per batch: {:.3f}[s] Speed: {:.1f}[samples/s]"
-                    .format(epoch, time_per_batch, train_loader.batch_size / time_per_batch))
+                        .format(epoch, time_per_batch, train_loader.batch_size / time_per_batch))
 
         if epoch % checkpoint_period == 0:
             if cfg.MODEL.DIST_TRAIN:
@@ -169,5 +170,3 @@ def do_inference(cfg,
     for r in [1, 5, 10]:
         logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc[r - 1]))
     return cmc[0], cmc[4]
-
-

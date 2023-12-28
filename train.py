@@ -13,6 +13,7 @@ import argparse
 # from timm.scheduler import create_scheduler
 from config import cfg
 
+
 def set_seed(seed):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
@@ -21,6 +22,7 @@ def set_seed(seed):
     random.seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = True
+
 
 if __name__ == '__main__':
 
@@ -65,7 +67,7 @@ if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = cfg.MODEL.DEVICE_ID
     train_loader, train_loader_normal, val_loader, num_query, num_classes, camera_num, view_num = make_dataloader(cfg)
 
-    model = make_model(cfg, num_class=num_classes, camera_num=camera_num, view_num = view_num)
+    model = make_model(cfg, num_class=num_classes, camera_num=camera_num, view_num=view_num)
 
     loss_func, center_criterion = make_loss(cfg, num_classes=num_classes)
 

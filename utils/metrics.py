@@ -12,6 +12,7 @@ def euclidean_distance(qf, gf):
     dist_mat.addmm_(1, -2, qf, gf.t())
     return dist_mat.cpu().numpy()
 
+
 def cosine_similarity(qf, gf):
     epsilon = 0.00001
     dist_mat = qf.mm(gf.t())
@@ -71,7 +72,7 @@ def eval_func(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
         # reference: https://en.wikipedia.org/wiki/Evaluation_measures_(information_retrieval)#Average_precision
         num_rel = orig_cmc.sum()
         tmp_cmc = orig_cmc.cumsum()
-        #tmp_cmc = [x / (i + 1.) for i, x in enumerate(tmp_cmc)]
+        # tmp_cmc = [x / (i + 1.) for i, x in enumerate(tmp_cmc)]
         y = np.arange(1, tmp_cmc.shape[0] + 1) * 1.0
         tmp_cmc = tmp_cmc / y
         tmp_cmc = np.asarray(tmp_cmc) * orig_cmc
@@ -131,6 +132,3 @@ class R1_mAP_eval():
         cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids)
 
         return cmc, mAP, distmat, self.pids, self.camids, qf, gf
-
-
-

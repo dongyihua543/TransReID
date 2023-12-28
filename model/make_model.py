@@ -5,12 +5,12 @@ import copy
 from .backbones.vit_pytorch import vit_base_patch16_224_TransReID, vit_small_patch16_224_TransReID, deit_small_patch16_224_TransReID
 from loss.metric_learning import Arcface, Cosface, AMSoftmax, CircleLoss
 
-def shuffle_unit(features, shift, group, begin=1):
 
+def shuffle_unit(features, shift, group, begin=1):
     batchsize = features.size(0)
     dim = features.size(-1)
     # Shift Operation
-    feature_random = torch.cat([features[:, begin-1+shift:], features[:, begin:begin-1+shift]], dim=1)
+    feature_random = torch.cat([features[:, begin - 1 + shift:], features[:, begin:begin - 1 + shift]], dim=1)
     x = feature_random
     # Patch Shuffle Operation
     try:
@@ -23,6 +23,7 @@ def shuffle_unit(features, shift, group, begin=1):
     x = x.view(batchsize, -1, dim)
 
     return x
+
 
 def weights_init_kaiming(m):
     classname = m.__class__.__name__
@@ -38,6 +39,7 @@ def weights_init_kaiming(m):
         if m.affine:
             nn.init.constant_(m.weight, 1.0)
             nn.init.constant_(m.bias, 0.0)
+
 
 def weights_init_classifier(m):
     classname = m.__class__.__name__
@@ -143,7 +145,7 @@ class build_transformer(nn.Module):
 
         self.base = factory[cfg.MODEL.TRANSFORMER_TYPE](img_size=cfg.INPUT.SIZE_TRAIN, sie_xishu=cfg.MODEL.SIE_COE,
                                                         camera=camera_num, view=view_num, stride_size=cfg.MODEL.STRIDE_SIZE, drop_path_rate=cfg.MODEL.DROP_PATH,
-                                                        drop_rate= cfg.MODEL.DROP_OUT,
+                                                        drop_rate=cfg.MODEL.DROP_OUT,
                                                         attn_drop_rate=cfg.MODEL.ATT_DROP_RATE)
         if cfg.MODEL.TRANSFORMER_TYPE == 'deit_small_patch16_224_TransReID':
             self.in_planes = 384
@@ -156,21 +158,21 @@ class build_transformer(nn.Module):
         self.num_classes = num_classes
         self.ID_LOSS_TYPE = cfg.MODEL.ID_LOSS_TYPE
         if self.ID_LOSS_TYPE == 'arcface':
-            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE,cfg.SOLVER.COSINE_SCALE,cfg.SOLVER.COSINE_MARGIN))
+            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE, cfg.SOLVER.COSINE_SCALE, cfg.SOLVER.COSINE_MARGIN))
             self.classifier = Arcface(self.in_planes, self.num_classes,
                                       s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
         elif self.ID_LOSS_TYPE == 'cosface':
-            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE,cfg.SOLVER.COSINE_SCALE,cfg.SOLVER.COSINE_MARGIN))
+            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE, cfg.SOLVER.COSINE_SCALE, cfg.SOLVER.COSINE_MARGIN))
             self.classifier = Cosface(self.in_planes, self.num_classes,
                                       s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
         elif self.ID_LOSS_TYPE == 'amsoftmax':
-            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE,cfg.SOLVER.COSINE_SCALE,cfg.SOLVER.COSINE_MARGIN))
+            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE, cfg.SOLVER.COSINE_SCALE, cfg.SOLVER.COSINE_MARGIN))
             self.classifier = AMSoftmax(self.in_planes, self.num_classes,
                                         s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
         elif self.ID_LOSS_TYPE == 'circle':
             print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE, cfg.SOLVER.COSINE_SCALE, cfg.SOLVER.COSINE_MARGIN))
             self.classifier = CircleLoss(self.in_planes, self.num_classes,
-                                        s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
+                                         s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
         else:
             self.classifier = nn.Linear(self.in_planes, self.num_classes, bias=False)
             self.classifier.apply(weights_init_classifier)
@@ -179,7 +181,7 @@ class build_transformer(nn.Module):
         self.bottleneck.bias.requires_grad_(False)
         self.bottleneck.apply(weights_init_kaiming)
 
-    def forward(self, x, label=None, cam_label= None, view_label=None):
+    def forward(self, x, label=None, cam_label=None, view_label=None):
         global_feat = self.base(x, cam_label=cam_label, view_label=view_label)
 
         feat = self.bottleneck(global_feat)
@@ -234,7 +236,8 @@ class build_transformer_local(nn.Module):
         else:
             view_num = 0
 
-        self.base = factory[cfg.MODEL.TRANSFORMER_TYPE](img_size=cfg.INPUT.SIZE_TRAIN, sie_xishu=cfg.MODEL.SIE_COE, local_feature=cfg.MODEL.JPM, camera=camera_num, view=view_num, stride_size=cfg.MODEL.STRIDE_SIZE, drop_path_rate=cfg.MODEL.DROP_PATH)
+        self.base = factory[cfg.MODEL.TRANSFORMER_TYPE](img_size=cfg.INPUT.SIZE_TRAIN, sie_xishu=cfg.MODEL.SIE_COE, local_feature=cfg.MODEL.JPM, camera=camera_num, view=view_num, stride_size=cfg.MODEL.STRIDE_SIZE,
+                                                        drop_path_rate=cfg.MODEL.DROP_PATH)
 
         if pretrain_choice == 'imagenet':
             self.base.load_param(model_path)
@@ -254,21 +257,21 @@ class build_transformer_local(nn.Module):
         self.num_classes = num_classes
         self.ID_LOSS_TYPE = cfg.MODEL.ID_LOSS_TYPE
         if self.ID_LOSS_TYPE == 'arcface':
-            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE,cfg.SOLVER.COSINE_SCALE,cfg.SOLVER.COSINE_MARGIN))
+            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE, cfg.SOLVER.COSINE_SCALE, cfg.SOLVER.COSINE_MARGIN))
             self.classifier = Arcface(self.in_planes, self.num_classes,
                                       s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
         elif self.ID_LOSS_TYPE == 'cosface':
-            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE,cfg.SOLVER.COSINE_SCALE,cfg.SOLVER.COSINE_MARGIN))
+            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE, cfg.SOLVER.COSINE_SCALE, cfg.SOLVER.COSINE_MARGIN))
             self.classifier = Cosface(self.in_planes, self.num_classes,
                                       s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
         elif self.ID_LOSS_TYPE == 'amsoftmax':
-            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE,cfg.SOLVER.COSINE_SCALE,cfg.SOLVER.COSINE_MARGIN))
+            print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE, cfg.SOLVER.COSINE_SCALE, cfg.SOLVER.COSINE_MARGIN))
             self.classifier = AMSoftmax(self.in_planes, self.num_classes,
                                         s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
         elif self.ID_LOSS_TYPE == 'circle':
             print('using {} with s:{}, m: {}'.format(self.ID_LOSS_TYPE, cfg.SOLVER.COSINE_SCALE, cfg.SOLVER.COSINE_MARGIN))
             self.classifier = CircleLoss(self.in_planes, self.num_classes,
-                                        s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
+                                         s=cfg.SOLVER.COSINE_SCALE, m=cfg.SOLVER.COSINE_MARGIN)
         else:
             self.classifier = nn.Linear(self.in_planes, self.num_classes, bias=False)
             self.classifier.apply(weights_init_classifier)
@@ -305,12 +308,12 @@ class build_transformer_local(nn.Module):
         print('using divide_length size:{}'.format(self.divide_length))
         self.rearrange = rearrange
 
-    def forward(self, x, label=None, cam_label= None, view_label=None):  # label is unused if self.cos_layer == 'no'
+    def forward(self, x, label=None, cam_label=None, view_label=None):  # label is unused if self.cos_layer == 'no'
 
         features = self.base(x, cam_label=cam_label, view_label=view_label)
 
         # global branch
-        b1_feat = self.b1(features) # [64, 129, 768]
+        b1_feat = self.b1(features)  # [64, 129, 768]
         global_feat = b1_feat[:, 0]
 
         # JPM branch
@@ -328,17 +331,17 @@ class build_transformer_local(nn.Module):
         local_feat_1 = b1_local_feat[:, 0]
 
         # lf_2
-        b2_local_feat = x[:, patch_length:patch_length*2]
+        b2_local_feat = x[:, patch_length:patch_length * 2]
         b2_local_feat = self.b2(torch.cat((token, b2_local_feat), dim=1))
         local_feat_2 = b2_local_feat[:, 0]
 
         # lf_3
-        b3_local_feat = x[:, patch_length*2:patch_length*3]
+        b3_local_feat = x[:, patch_length * 2:patch_length * 3]
         b3_local_feat = self.b2(torch.cat((token, b3_local_feat), dim=1))
         local_feat_3 = b3_local_feat[:, 0]
 
         # lf_4
-        b4_local_feat = x[:, patch_length*3:patch_length*4]
+        b4_local_feat = x[:, patch_length * 3:patch_length * 4]
         b4_local_feat = self.b2(torch.cat((token, b4_local_feat), dim=1))
         local_feat_4 = b4_local_feat[:, 0]
 
@@ -359,9 +362,9 @@ class build_transformer_local(nn.Module):
                 cls_score_3 = self.classifier_3(local_feat_3_bn)
                 cls_score_4 = self.classifier_4(local_feat_4_bn)
             return [cls_score, cls_score_1, cls_score_2, cls_score_3,
-                        cls_score_4
-                        ], [global_feat, local_feat_1, local_feat_2, local_feat_3,
-                            local_feat_4]  # global feature for triplet loss
+                    cls_score_4
+                    ], [global_feat, local_feat_1, local_feat_2, local_feat_3,
+                        local_feat_4]  # global feature for triplet loss
         else:
             if self.neck_feat == 'after':
                 return torch.cat(
@@ -389,6 +392,7 @@ __factory_T_type = {
     'vit_small_patch16_224_TransReID': vit_small_patch16_224_TransReID,
     'deit_small_patch16_224_TransReID': deit_small_patch16_224_TransReID
 }
+
 
 def make_model(cfg, num_class, camera_num, view_num):
     if cfg.MODEL.NAME == 'transformer':

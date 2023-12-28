@@ -10,7 +10,7 @@ from .triplet_loss import TripletLoss
 from .center_loss import CenterLoss
 
 
-def make_loss(cfg, num_classes):    # modified by gu
+def make_loss(cfg, num_classes):  # modified by gu
     sampler = cfg.DATALOADER.SAMPLER
     feat_dim = 2048
     center_criterion = CenterLoss(num_classes=num_classes, feat_dim=feat_dim, use_gpu=True)  # center loss
@@ -45,14 +45,14 @@ def make_loss(cfg, num_classes):    # modified by gu
                         ID_LOSS = xent(score, target)
 
                     if isinstance(feat, list):
-                            TRI_LOSS = [triplet(feats, target)[0] for feats in feat[1:]]
-                            TRI_LOSS = sum(TRI_LOSS) / len(TRI_LOSS)
-                            TRI_LOSS = 0.5 * TRI_LOSS + 0.5 * triplet(feat[0], target)[0]
+                        TRI_LOSS = [triplet(feats, target)[0] for feats in feat[1:]]
+                        TRI_LOSS = sum(TRI_LOSS) / len(TRI_LOSS)
+                        TRI_LOSS = 0.5 * TRI_LOSS + 0.5 * triplet(feat[0], target)[0]
                     else:
-                            TRI_LOSS = triplet(feat, target)[0]
+                        TRI_LOSS = triplet(feat, target)[0]
 
                     return cfg.MODEL.ID_LOSS_WEIGHT * ID_LOSS + \
-                               cfg.MODEL.TRIPLET_LOSS_WEIGHT * TRI_LOSS
+                           cfg.MODEL.TRIPLET_LOSS_WEIGHT * TRI_LOSS
                 else:
                     if isinstance(score, list):
                         ID_LOSS = [F.cross_entropy(scor, target) for scor in score[1:]]
@@ -62,14 +62,14 @@ def make_loss(cfg, num_classes):    # modified by gu
                         ID_LOSS = F.cross_entropy(score, target)
 
                     if isinstance(feat, list):
-                            TRI_LOSS = [triplet(feats, target)[0] for feats in feat[1:]]
-                            TRI_LOSS = sum(TRI_LOSS) / len(TRI_LOSS)
-                            TRI_LOSS = 0.5 * TRI_LOSS + 0.5 * triplet(feat[0], target)[0]
+                        TRI_LOSS = [triplet(feats, target)[0] for feats in feat[1:]]
+                        TRI_LOSS = sum(TRI_LOSS) / len(TRI_LOSS)
+                        TRI_LOSS = 0.5 * TRI_LOSS + 0.5 * triplet(feat[0], target)[0]
                     else:
-                            TRI_LOSS = triplet(feat, target)[0]
+                        TRI_LOSS = triplet(feat, target)[0]
 
                     return cfg.MODEL.ID_LOSS_WEIGHT * ID_LOSS + \
-                               cfg.MODEL.TRIPLET_LOSS_WEIGHT * TRI_LOSS
+                           cfg.MODEL.TRIPLET_LOSS_WEIGHT * TRI_LOSS
             else:
                 print('expected METRIC_LOSS_TYPE should be triplet'
                       'but got {}'.format(cfg.MODEL.METRIC_LOSS_TYPE))
@@ -78,5 +78,3 @@ def make_loss(cfg, num_classes):    # modified by gu
         print('expected sampler should be softmax, triplet, softmax_triplet or softmax_triplet_center'
               'but got {}'.format(cfg.DATALOADER.SAMPLER))
     return loss_func, center_criterion
-
-

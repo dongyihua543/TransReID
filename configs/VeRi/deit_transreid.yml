@@ -8,7 +8,7 @@ MODEL:
   NO_MARGIN: True
   DEVICE_ID: ('4')
   TRANSFORMER_TYPE: 'vit_base_patch16_224_TransReID'
-  STRIDE_SIZE: [16, 16]
+  STRIDE_SIZE: [ 16, 16 ]
   SIE_CAMERA: True
   SIE_VIEW: True
   SIE_COE: 3.0
@@ -17,8 +17,8 @@ MODEL:
   RE_ARRANGE: True
 
 INPUT:
-  SIZE_TRAIN: [256, 256]
-  SIZE_TEST: [256, 256]
+  SIZE_TRAIN: [ 256, 256 ]
+  SIZE_TEST: [ 256, 256 ]
   PROB: 0.5 # random horizontal flip
   RE_PROB: 0.8 # random erasing
   PADDING: 10
@@ -42,7 +42,7 @@ SOLVER:
   CHECKPOINT_PERIOD: 120
   LOG_PERIOD: 50
   EVAL_PERIOD: 120
-  WEIGHT_DECAY:  1e-4
+  WEIGHT_DECAY: 1e-4
   WEIGHT_DECAY_BIAS: 1e-4
   BIAS_LR_FACTOR: 2
 
