@@ -223,3 +223,4 @@ ENV/
 /data/*
 /save/*
 /pretrain/*
+/logs/*
