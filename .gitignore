@@ -221,3 +221,5 @@ ENV/
 .ropeproject
 
 /data/*
+/save/*
+/pretrain/*
