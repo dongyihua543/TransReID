@@ -308,12 +308,9 @@ class TransReID(nn.Module):
         self.num_features = self.embed_dim = embed_dim  # num_features for consistency with other models
         self.local_feature = local_feature
         if hybrid_backbone is not None:
-            self.patch_embed = HybridEmbed(
-                hybrid_backbone, img_size=img_size, in_chans=in_chans, embed_dim=embed_dim)
+            self.patch_embed = HybridEmbed(hybrid_backbone, img_size=img_size, in_chans=in_chans, embed_dim=embed_dim)
         else:
-            self.patch_embed = PatchEmbed_overlap(
-                img_size=img_size, patch_size=patch_size, stride_size=stride_size, in_chans=in_chans,
-                embed_dim=embed_dim)
+            self.patch_embed = PatchEmbed_overlap(img_size=img_size, patch_size=patch_size, stride_size=stride_size, in_chans=in_chans, embed_dim=embed_dim)
 
         num_patches = self.patch_embed.num_patches
 
