@@ -246,14 +246,8 @@ class build_transformer_local(nn.Module):
 
         block = self.base.blocks[-1]
         layer_norm = self.base.norm
-        self.b1 = nn.Sequential(
-            copy.deepcopy(block),
-            copy.deepcopy(layer_norm)
-        )
-        self.b2 = nn.Sequential(
-            copy.deepcopy(block),
-            copy.deepcopy(layer_norm)
-        )
+        self.b1 = nn.Sequential(copy.deepcopy(block), copy.deepcopy(layer_norm))
+        self.b2 = nn.Sequential(copy.deepcopy(block), copy.deepcopy(layer_norm))
 
         self.num_classes = num_classes
         self.ID_LOSS_TYPE = cfg.MODEL.ID_LOSS_TYPE
