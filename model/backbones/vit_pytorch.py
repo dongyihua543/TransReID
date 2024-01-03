@@ -264,13 +264,15 @@ class PatchEmbed_overlap(nn.Module):
         stride_size_tuple = to_2tuple(stride_size)
         self.num_x = (img_size[1] - patch_size[1]) // stride_size_tuple[1] + 1
         self.num_y = (img_size[0] - patch_size[0]) // stride_size_tuple[0] + 1
-        print('using stride: {}, and patch number is num_y{} * num_x{}'.format(stride_size, self.num_y, self.num_x))
+        print('using stride: {}, and patch number is num_y:{} * num_x:{}'.format(stride_size, self.num_y, self.num_x))
         num_patches = self.num_x * self.num_y
         self.img_size = img_size
         self.patch_size = patch_size
         self.num_patches = num_patches
 
         self.proj = nn.Conv2d(in_chans, embed_dim, kernel_size=patch_size, stride=stride_size)
+        modules = list(self.modules())
+
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
