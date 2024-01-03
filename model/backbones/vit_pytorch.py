@@ -399,13 +399,10 @@ class TransReID(nn.Module):
             for blk in self.blocks[:-1]:
                 x = blk(x)
             return x
-
         else:
             for blk in self.blocks:
                 x = blk(x)
-
             x = self.norm(x)
-
             return x[:, 0]
 
     def forward(self, x, cam_label=None, view_label=None):
