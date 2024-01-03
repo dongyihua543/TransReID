@@ -50,6 +50,12 @@ if __name__ == '__main__':
     # 2. Image to Patch Embedding with overlapping patches
     patch_embed = PatchEmbed_overlap(img_size=[256, 128], patch_size=16, stride_size=[12, 12], in_chans=3, embed_dim=768)
 
-    for n_iter, (img, vid, target_cam, target_view) in enumerate(train_loader):
-        x = patch_embed(img)
-        print(x.shape)
+    # for n_iter, (img, vid, target_cam, target_view) in enumerate(train_loader):
+    #     x = patch_embed(img)
+    #     print(x.shape)
+
+    # 迭代器
+    train_loader_iterator = iter(train_loader)
+    img = next(train_loader_iterator)[0]
+    x = patch_embed(img)
+    print(img.shape, '->', x.shape)
