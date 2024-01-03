@@ -322,22 +322,22 @@ class TransReID(nn.Module):
         if camera > 1 and view > 1:
             self.sie_embed = nn.Parameter(torch.zeros(camera * view, 1, embed_dim))
             trunc_normal_(self.sie_embed, std=.02)
-            print('camera number is : {} and viewpoint number is : {}'.format(camera, view))
-            print('using SIE_Lambda is : {}'.format(sie_xishu))
+            print('camera number is: {} and viewpoint number is: {}'.format(camera, view))
+            print('using SIE_Lambda is: {}'.format(sie_xishu))
         elif camera > 1:
             self.sie_embed = nn.Parameter(torch.zeros(camera, 1, embed_dim))
             trunc_normal_(self.sie_embed, std=.02)
-            print('camera number is : {}'.format(camera))
-            print('using SIE_Lambda is : {}'.format(sie_xishu))
+            print('camera number is: {}'.format(camera))
+            print('using SIE_Lambda is: {}'.format(sie_xishu))
         elif view > 1:
             self.sie_embed = nn.Parameter(torch.zeros(view, 1, embed_dim))
             trunc_normal_(self.sie_embed, std=.02)
-            print('viewpoint number is : {}'.format(view))
-            print('using SIE_Lambda is : {}'.format(sie_xishu))
+            print('viewpoint number is: {}'.format(view))
+            print('using SIE_Lambda is: {}'.format(sie_xishu))
 
-        print('using drop_out rate is : {}'.format(drop_rate))
-        print('using attn_drop_out rate is : {}'.format(attn_drop_rate))
-        print('using drop_path rate is : {}'.format(drop_path_rate))
+        print('using drop_out rate is: {}'.format(drop_rate))
+        print('using attn_drop_out rate is: {}'.format(attn_drop_rate))
+        print('using drop_path rate is: {}'.format(drop_path_rate))
 
         self.pos_drop = nn.Dropout(p=drop_rate)
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, depth)]  # stochastic depth decay rule
@@ -444,7 +444,7 @@ def resize_pos_embed(posemb, posemb_new, hight, width):
     ntok_new -= 1
 
     gs_old = int(math.sqrt(len(posemb_grid)))
-    print('Resized position embedding from size:{} to size: {} with height:{} width: {}'.format(posemb.shape, posemb_new.shape, hight, width))
+    print('Resized position embedding from size: {} to size: {} with height: {} width: {}'.format(posemb.shape, posemb_new.shape, hight, width))
     posemb_grid = posemb_grid.reshape(1, gs_old, gs_old, -1).permute(0, 3, 1, 2)
     posemb_grid = F.interpolate(posemb_grid, size=(hight, width), mode='bilinear')
     posemb_grid = posemb_grid.permute(0, 2, 3, 1).reshape(1, hight * width, -1)
